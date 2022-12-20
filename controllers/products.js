@@ -239,6 +239,64 @@ var prod_controller = {
 
 
     },
+
+    getProducts: function(req, res){
+
+        Prod.find((err, prods) => {
+
+            if (err) {
+
+                return res.status(500).send({
+                    status: "error",
+                    message: "Internal error."
+                })
+                
+            }
+
+
+            if (!prods) {
+
+                return res.status(404).send({
+                    status: "error",
+                    message: "There is not products to show."
+                })
+
+            }
+
+            return res.status(200).send({
+                status: "success",
+                prod: prods
+            })
+        })
+
+
+    },
+
+    getProductsImg: function(req, res){
+
+        let img = req.params.img
+      
+        
+        let filePath = './uploads/users/products/' + img
+        
+        fs.exists(filePath,(exist)=>{
+          
+            if (exist) {
+
+                return res.sendFile(path.resolve(filePath));
+                
+            } else {
+                return res.status(404).send({
+                    message: "Imagen no existe."
+                })
+            }
+        })
+
+
+
+
+    },
+
      updateItem:function (req, res) {
 
     var param = req.body

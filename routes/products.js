@@ -16,6 +16,10 @@ var router = express.Router()
 router.get('/probadora', ProdController.probador)
 router.get('/codeupc/:id', md_auth.authenticated, ProdController.getupc)
 router.get('/find-prod/:prod', ProdController.search)
+router.get('/get-products', ProdController.getProducts)
+router.get('/prod-img/:img', ProdController.getProductsImg);
+
+
 //RUTAS POST
 
 router.post('/additem',[md_auth.authenticated, md_load], ProdController.addItem )

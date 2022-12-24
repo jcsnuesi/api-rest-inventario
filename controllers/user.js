@@ -54,7 +54,7 @@ var controller = {
             new_user.surname = param.surname
             new_user.user = param.user
             new_user.email = param.email
-            new_user.role = param.role
+            new_user.role = param.role || 'USER_ROLE'
             new_user.avatar = null;
 
             //Comprobar que no existe en la BD.

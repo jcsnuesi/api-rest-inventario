@@ -1,0 +1,91 @@
+<div class="container">
+
+    <h1>{{title}}</h1>
+
+    <hr>
+
+    <div class="col-md-4">
+        <form #createProdform="ngForm" (ngSubmit)="newItem(createProdform)">
+        
+        
+            <div class="pic">
+        
+                <label class="input-group-text">Image</label>
+               
+                <angular-file-uploader 
+                [config]="afuConfig" 
+                [resetUpload]=resetVar 
+                (ApiResponse)="avatarUpload($event)">
+                </angular-file-uploader>
+    
+                  <span *ngIf="status == false">
+                        <img src="../../../assets/resources/nopic.png" class="card-img-top" width="400px" height="350px" alt="...">
+                  </span>
+
+                    <span *ngIf="status == 'success'">
+                        <img src="{{url + 'prod-img/'+imgs}}" class="card-img-top" width="400px" height="350px" alt="...">
+                    </span>
+                                  
+                        
+            </div>
+        
+            <div class="form-floating mb-3">
+                <input type="text" [ngClass]="{'form-control is-invalid': !upc.valid , 'form-control': upc.valid}"  id="upc" placeholder="Barcode" name="upc" #upc="ngModel" [(ngModel)]="inventary.upc" > 
+                <label for="upc" required>UPC / BARCODE</label>
+                
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="companyName" placeholder="Company name or Product Brand" name="companyName" #companyName="ngModel" [(ngModel)]="inventary.companyName" required>
+                <label for="companyName">Company name</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="descrip" placeholder="Company name or Product Brand"  name="descriptions"  #descriptions="ngModel" [(ngModel)]="inventary.descriptions" required>
+                <label for="descrip">Descriptions</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="qty" placeholder="Product quantity" name="qty"
+                    #qty="ngModel" [(ngModel)]="inventary.qty" required>
+                <label for="qty">Product quantity</label>
+            </div>
+
+           
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="price" placeholder="Price" name="price"
+                    #price="ngModel" [(ngModel)]="inventary.price" >
+                <label for="price">Product price</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="expDate" placeholder="Company name or Product Brand" name="expDate" #expDate="ngModel" [(ngModel)]="inventary.expDate">
+                <label for="expDate">Expiration date</label>
+            </div>
+
+           
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="mfd" placeholder="MFD (Manufacturing Date)" name="mfd" #mfd="ngModel" [(ngModel)]="inventary.mfd">
+                <label for="mfd">MFD (Manufacturing Date)</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="itemWeight" placeholder="Company name or Product Brand" name="itemWeight" #itemWeight="ngModel" [(ngModel)]="inventary.itemWeight" required>
+                <label for="itemWeight">Item weight</label>
+            </div>
+
+            <span class="aling-btn">
+                <input type="submit" class="btn btn-success" value="{{title}}" [disabled]="!createProdform.valid">
+            </span>
+            
+           
+        
+        </form>
+
+    </div>
+
+
+</div>
+

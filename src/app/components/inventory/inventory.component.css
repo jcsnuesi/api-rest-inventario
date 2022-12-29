@@ -1,0 +1,28 @@
+.scroll {
+    overflow-x: scroll;
+    max-width: max-content;
+    
+}
+
+.over-bg:hover{
+
+    background-color: rgb(117, 228, 154);
+}
+
+.form-productUpdate{
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+}
+
+.second{
+    float: right;
+    
+
+}
+.search-form{
+    display: inline-flex;
+}
+
+

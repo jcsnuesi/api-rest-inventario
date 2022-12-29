@@ -1,0 +1,48 @@
+
+.imgEbay{
+
+    display: block;
+    margin: auto;
+    
+  
+}
+
+.sizeImg{
+
+    width: 450px;
+    height: 350px;
+}
+
+.nav-letter {
+    font-family: BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif
+    
+}
+
+.nav-options-bg:hover a {
+   
+    color: rgb(255, 230, 0);
+    
+}
+
+.nav-options-bg:hover {
+    background-color: rgb(32, 32, 194);
+    
+    border-radius: 900px;
+}
+
+.setting:hover a{
+
+    color: red;
+   
+}
+.setting:hover {
+    
+    color: red;
+    background-color: aliceblue;
+    border-radius: 900px;
+}

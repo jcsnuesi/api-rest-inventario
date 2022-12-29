@@ -1,0 +1,182 @@
+
+<div class="container">
+
+    <h1>{{title}}</h1>
+
+    <hr>
+
+    <div class="col-lg-12">
+      
+        <form class="search-form" #formSearch="ngForm">
+            
+            <input class="form-control me-2 inputBar" type="search" placeholder="UPC, Company Name" aria-label="Search" name="searcher" #searcher="ngModel" [(ngModel)]="searchs">
+            <button class="btn btn-outline-success" (click)="searchProducts()">Search</button>
+                      
+        </form>
+       
+        <span class="search-form">
+            <button class="btn btn-outline-secondary ms-2 " style="margin: 73.25 38.21 auto ;" type="submit"
+        (click)="onSubmit()">Clear</button>
+        </span>
+         
+        <div class="alert alert-warning mt-4" role="alert" *ngIf="this.status == 'error1'">
+           Not found!
+        </div>
+
+    </div>
+    
+    <div class="col-lg-12 scroll">
+  
+    <table class="table mt-4 table-fixed">
+        <thead class="table-light sticky-top">
+            <tr>
+                <th>#</th>
+                <th>UPC</th>
+                <th>Image</th>
+                <th>Company name</th>
+                <th>Description</th>
+                <th>Qty</th>
+                <th *ngIf="identity.login.role == 'ADMIN'">Price</th>
+                <th>Exp. date</th>
+                <th>MFD</th>
+                <th>Item weight</th>
+                <th>Action</th>
+
+            </tr>
+                                  
+        </thead>
+        <tbody>
+
+            <tr class="over-bg" *ngFor="let inv of products; index as i">
+                <td>{{i+1}}</td>
+                <td>{{inv.upc}}</td>
+                <td>
+                    <img src="{{images(inv.image)}}" alt="" width="200" height="200">
+                </td>
+               
+                <td>{{inv.companyName}}</td>
+                <td>{{inv.descriptions}}</td>
+                <td>{{inv.qty}}</td>
+                <td *ngIf="identity.login.role == 'ADMIN'">{{inv.price.$numberDecimal}}</td>
+                <td>{{ExpDateKey(inv)}}</td>                               
+                <td>{{mfdKey(inv)}}</td>
+                <td>{{inv.itemWeight.$numberDecimal}}</td>
+                <td><a class="btn btn-light" data-bs-toggle="modal" [attr.data-bs-target]="'#exampleModal'+inv._id" >Edit</a></td>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="{{'exampleModal'+inv._id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Products details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                           
+                            <form #updateProdform="ngForm" (ngSubmit)="update(updateProdform)" >
+                                <div class="modal-body">
+                                    <p hidden>
+                                        <input type="text" name="id" #id="ngModel" [(ngModel)]="inv._id" class="form-control"  value="{{inv._id}}">
+                                    </p>
+                                    <div class="form-productUpdate" >
+                                        <span class="me-2">
+                                            <label for="upc">UPC</label>
+                                            <input type="text" name="upc" #upc="ngModel" [(ngModel)]="inv.upc" class="form-control" id="upc" value="{{inv.upc}}">
+                                        </span>
+                                    
+                                        <span class="me-2">
+                                            <label for="companyName">Company Name</label>
+                                            <input type="text" name="companyName" #companyName="ngModel" [(ngModel)]="inv.companyName" class="form-control" id="companyName" value="{{inv.companyName}}">
+                                        </span>
+
+                                        <span class="me-2">
+                                            <label for="descriptions">Description</label>
+                                            <input type="text" name="descriptions" #descriptions="ngModel" [(ngModel)]="inv.descriptions"  class="form-control" id="descriptions" value="{{inv.descriptions}}">
+                                        </span>
+
+                                        <span class="me-2">
+                                            <label for="qtys">Qty</label>
+                                            <input type="text" class="form-control" name="qty" #qty="ngModel" [(ngModel)]="inv.qty" id="qtys" value="{{inv.qty}}">
+                                        </span>
+
+                                        <span class="me-2"  *ngIf="identity.login.role == 'ADMIN'">
+                                            <label for="prices">Price</label>
+                                            <input type="text" class="form-control" id="prices" #price="ngModel" name="price" [(ngModel)]="inv.price.$numberDecimal" value="{{inv.price.$numberDecimal}}">
+                                        </span>
+
+                                        <span class="me-2">
+                                            <label for="expDate">Exp. Date</label>
+                                            <input type="text" name="expireDateOrmfd.expDate" #expDate="ngModel" [(ngModel)]="inv.expireDateOrmfd.expDate" class="form-control" id="expDate" value="{{inv.expireDateOrmfd.expDate}}"   maxlength="10">
+                                        </span>
+
+                                        <span class="me-2">
+                                            <label for="mdf">MFD</label>
+                                            <input type="text" name="expireDateOrmfd.mfd" #mfd="ngModel" [(ngModel)]="inv.expireDateOrmfd.mfd" class="form-control" id="mdf" value="{{inv.expireDateOrmfd.mfd}}" maxlength="10">
+                                        </span>
+
+                                        <span class="me-2">
+                                            <label for="itemweight">Item weight</label>
+                                            <input type="text" class="form-control" id="itemweight" value="{{inv.itemWeight.$numberDecimal}}" name="itemWeight" #itemWeight="ngModel" [(ngModel)]="inv.itemWeight.$numberDecimal">
+                                        </span>
+                                    </div>
+                                                                      
+                                </div>
+
+                                <div class="modal-footer">
+
+                                    <span class="alert alert-danger col-md-6" role="alert" *ngIf="status == 'error2'">
+                                        Item was not updating!
+                                    </span>
+
+                                    <span class="alert alert-success col-md-6" role="alert" *ngIf="status == 'success'">
+                                        Item updated successfully!
+                                    </span>
+
+                                    <span class="alert alert-warning col-md-6" role="alert" *ngIf="status == 'deleted'">
+                                        Item was deleted successfully!
+                                    </span>
+
+
+                                    <span class="alert alert-danger col-md-6" role="alert" *ngIf="status == 'error3'">
+                                        Item was not deleted.
+                                    </span>
+
+                                    <button type="button" class="btn btn-danger" (click)="itemDel(inv._id)">Delete</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onSubmit()">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                   
+                                   
+                                </div>
+
+                           
+
+                            </form>
+                        
+                         
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example" *ngIf="!nopaginate">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item" *ngFor="let num of number_pages">
+                <a class="page-link" [routerLink]="['/inventory', num]">{{num}}</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+
+    </div>
+
+
+
+</div>
+
+
+

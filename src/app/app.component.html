@@ -1,0 +1,250 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Inventory App</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item nav-options-bg nav-letter">
+          <a class="nav-link nav-options" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item nav-options-bg nav-letter">
+          <a class="nav-link nav-options" [routerLink]="['/create-item']">Create item</a>
+        </li>
+        <li class="nav-item nav-options-bg nav-letter">
+          <a class="nav-link nav-options me-4" [routerLink]="['/inventory']">Inventory</a>
+        </li>
+
+
+        <li class="nav-item">
+          <form class="d-flex m-start" #EbayForm="ngForm" (ngSubmit)="foundOnEbay(EbayForm)" novalidate>
+            <input class="form-control me-2" type="search" placeholder="Search on ebay" name="findEbay" #findEbay="ngModel" [(ngModel)]="search.search" aria-label="Search">
+          
+            <button class="btn btn-outline-secondary nav-letter"  data-bs-toggle="modal" [attr.data-bs-target]="'#exampleModal'" [disabled]="!search.search.length">Search</button>
+          </form>
+        </li>
+      </ul>
+        
+
+      <ul class="navbar-nav navbar-right">
+
+        <li class="nav-item setting nav-letter" *ngIf="!identity.login">
+          <a class="nav-link pointer nav-letter" [routerLink]="['/register']">Register</a>
+        </li>
+        <li class="nav-item pointer setting nav-letter"  *ngIf="!identity.login">
+          <a class="nav-link nav-letter" [routerLink]="['/login']">Login</a>
+        </li>
+
+        <li class="nav-item dropdown setting nav-letter"  *ngIf="identity.login">
+          <a class="nav-link nav-letter " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            {{identity.login.name + ' ' + identity.login.surname}}
+          </a>
+
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+            <li><a class="dropdown-item nav-letter" href="#" hidden>Setting</a></li>
+            <li><a class="dropdown-item nav-letter" href="#" hidden>Profile</a></li>
+            
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li><a class="dropdown-item" (click)="logout()">Log Out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal fade" id="{{'exampleModal'}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Products Ebay</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+   
+      <div class="alert alert-secondary mt-2" role="alert" *ngIf="status == 'noFound'">
+        Item no found!! You can create it manually here... <a [routerLink]="['create-item']" data-bs-dismiss="modal">Create!</a>
+      </div>
+      <div class="result" *ngFor="let inventary of item; index as inc">
+
+        
+
+          <form #updateProdform="ngForm" (ngSubmit)="newItem(updateProdform)" *ngIf="status != 'noFound'">
+            <div class="modal-body">
+                          
+                <div class="form-group">
+                 
+                  <label class="input-group-text">Image</label>
+                  <input type="text" name="file0" #file0="ngModel" [(ngModel)]="inventary.image.imageUrl" class="form-control"
+                    id="file0" value="{{inventary.image.imageUrl}}" hidden >
+                
+                    <div class="imgEbay">
+                      <img class="ms-2 mt-2 sizeImg" src="{{inventary.image.imageUrl}}" alt="">
+                    </div>
+                 
+                </div>
+
+                <div class="form-group">
+                  
+                  <label class="input-group-text mt-2" for="{{'companyName'+inc}}">Title</label>
+                  <input type="text" name="companyName" #companyName="ngModel" [(ngModel)]="inventary.title" class="form-control mt-2" id="{{'companyName'+inc}}">
+                </div>
+
+                <div class="accordion mt-2"  id="accordionExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseOne'+inc"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        More details...
+                      </button>
+                    </h2>
+                    <div id="{{'collapseOne'+inc}}" class="accordion-collapse collapse false" aria-labelledby="headingOne"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+
+                        <div class="form-group">
+                        
+                          <label class="input-group-text mt-2" for="{{'upc'+inc}}">UPC</label>
+                          <input type="text" name="upc" #upc [(ngModel)]="upc.value" class="form-control mt-2"
+                            id="{{'upc'+inc}}">
+                        
+                        </div>
+                     
+                        <div class="form-group">
+                        
+                          <label class="input-group-text mt-2" for="{{'descrip'+inc}}">Description</label>
+                          <input type="text" name="descriptions" #descriptions [(ngModel)]="descriptions.value" class="form-control mt-2" id="{{'descriptions'+inc}}" required>
+                        
+                        </div>
+                        
+                        <div class="form-group">
+                        
+                          <label class="input-group-text mt-2" for="{{'qty'+inc}}">Qty</label>
+                          <input type="text" name="qty" #qty="" [(ngModel)]="qty.value" class="form-control mt-2" id="{{'qty'+inc}}" required>
+                        
+                        </div>
+                        
+                        <div class="form-group" *ngIf="identity.login.role == 'ADMIN'">
+                        
+                          <label class="input-group-text mt-2" for="{{'price'+inc}}">Price</label>
+                          <input type="text" name="price" #price [(ngModel)]="price.value"  class="form-control mt-2" id="{{'price'+inc}}">
+                        
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                        
+                          <label class="input-group-text mt-2" for="{{'expireDateOrmfd'+inc}}">Expitation Date</label>
+                          <input type="text" name="expDate" #expireDateOrmfd [(ngModel)]="expireDateOrmfd.value"  class="form-control mt-2"
+                            id="{{'expireDateOrmfd'+inc}}">
+                        
+                        </div>
+                        
+                        <div class="form-group">
+                        
+                          <label class="input-group-text mt-2" for="{{'expireDateOrmfd.mfd'+inc}}">MFD</label>
+                          <input type="text" name="mfd" #expiremfd [(ngModel)]="expiremfd.value"
+                            class="form-control mt-2" id="{{'expireDateOrmfd.mfd'+inc}}">
+                        
+                        </div>
+                        
+                        <div class="form-group">
+                        
+                          <label class="input-group-text mt-2" for="{{'itemWeight'+inc}}">Item weight</label>
+                          <input type="text" name="itemWeight" #itemWeight [(ngModel)]="itemWeight.value" class="form-control mt-2" id="{{'itemWeight'+inc}}">
+                        
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                                
+                
+                </div>
+            
+          
+            </div>
+          
+            <div class="modal-footer">
+              <span class="alert alert-warning col-md-6" role="alert" *ngIf="status == 'error4'">
+                Item is already registered.
+              </span>
+
+                <span class="alert alert-success col-md-6" role="alert" *ngIf="status == 'success'">
+                  Item registered successfully.
+                </span>
+           
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+              <button type="submit" class="btn btn-primary" >Save advertisement</button>
+                    
+            </div>
+                  
+          
+          </form>
+
+
+      </div>
+      
+
+    </div>
+  </div>
+</div>
+
+  <router-outlet></router-outlet>
+  
+<div class="display-flex"></div>
+  <div class="container">
+    <footer class="row row-cols-5 py-5 my-5 border-top">
+      <div class="col">
+        <a [routerLink]="['/inicio']" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
+          Inventary App
+        </a>
+        <p class="text-muted">© 2022 Ing. Hector Santos, Inc. All rights reserved</p>
+      </div>
+  
+      <div class="col">
+  
+      </div>
+  
+      <div class="col">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+        </ul>
+      </div>
+  
+      <div class="col">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+        </ul>
+      </div>
+  
+      <div class="col">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+        </ul>
+      </div>
+      
+    </footer>
+  </div>

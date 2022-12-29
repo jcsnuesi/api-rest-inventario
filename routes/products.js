@@ -26,6 +26,7 @@ router.get('/prod-page/:page', ProdController.getPagination);
 
 router.post('/additem',[md_auth.authenticated, md_load], ProdController.addItem )
 router.post('/update-img', [md_auth.authenticated, md_load], ProdController.updateImage)
+router.post('/item-img', [md_auth.authenticated, md_load], ProdController.itemPic)
 
 //RUTAS PUT
 

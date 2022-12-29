@@ -12,9 +12,6 @@ require('dotenv').config({ path:'variables.env'})
 //Leer localhost de variables y puerto
 const host = process.env.HOST || '0.0.0.0'
 
-
-console.log(process.env.DB_URL)
-
 mongoose.connect(process.env.DB_URL, {useNewUrlParser: true})
         .then(() => {
             console.log('Conectado a la BD!')

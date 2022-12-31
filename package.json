@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "desarrollo": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js --mode production" 
   },
   "engines": {
     "node": "17.3.1",

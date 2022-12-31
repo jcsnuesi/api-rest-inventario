@@ -15,9 +15,9 @@ const host = process.env.HOST || '0.0.0.0'
 app.listen(port, host, () => {
     console.log('Servidor corriendo.')
 })
-mongoose.connect(process.env.DB_URL, {useNewUrlParser: true})
-        .then(() => {
-            console.log('Conectado a la BD!')
+// mongoose.connect(process.env.DB_URL, {useNewUrlParser: true})
+//         .then(() => {
+//             console.log('Conectado a la BD!')
 
         
-        }).catch(error => console.log(error))
+//         }).catch(error => console.log(error))
